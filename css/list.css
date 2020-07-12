@@ -179,7 +179,7 @@
 /* 商品图片位置上移 */
 
 .sk_goods img {
-    transition: all .1s;
+    transition: all .2s;
 }
 
 .sk_goods img:hover {
