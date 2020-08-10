@@ -68,7 +68,7 @@ window.addEventListener('load', function() {
     var num = 0;
     var circle = 0;
     //flag 节流阀
-    flag = true;
+    var flag = true;
     arrow_r.addEventListener('click', function() {
         if (flag) {
             flag = false //关闭节流阀
@@ -138,4 +138,43 @@ window.addEventListener('load', function() {
         arrow_r.click();
     }, 4000);
 
+    //刷新页面调用一次
+    toggleTool();
+    //电梯导航条
+    $(window).scroll(function() {
+        toggleTool();
+        //滚动时相对应的模块自动转换电梯导航栏的current
+
+        //节流阀 flag 当true时 就是点击了li 页面滚动中给li 添加背景类不需要执行
+        if (flag) {
+            $(".floor .w").each(function(index, element) {
+                if ($(document).scrollTop() >= $(element).offset().top) {
+                    $(".fixedtool li").eq(index).addClass("fixedtool_cur").siblings().removeClass("fixedtool_cur");
+                }
+            })
+        }
+    });
+
+    //点击电梯导航栏滚动到相对应模块
+    $(".fixedtool li").on("click", function() {
+        flag = false;
+        var contop = $(".floor .w").eq($(this).index()).offset().top;
+        // 页面效果滚动
+        $("html,body").stop().animate({
+            scrollTop: contop,
+        }, function() {
+            flag = true;
+        });
+        // 添加当前类
+        $(this).addClass("fixedtool_cur").siblings().removeClass("fixedtool_cur");
+    });
+
+    //电梯导航栏显示与隐藏封装函数
+    function toggleTool() {
+        if ($(document).scrollTop() >= $(".recommend").offset().top) {
+            $(".fixedtool").fadeIn();
+        } else {
+            $(".fixedtool").fadeOut();
+        }
+    }
 })
